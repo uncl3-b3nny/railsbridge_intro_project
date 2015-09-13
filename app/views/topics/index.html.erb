@@ -13,11 +13,17 @@
   </thead>
 
   <tbody>
-    <% @topics.each do |topic| %>
+    <!-- extra credit: "sort topics by their number of votes". Should really move a lot of this logic out of the view, but here's the quick and dirty: -->
+    <% @topics.sort_by {|topic| topic.votes.count}.each do |topic| %>
       <tr>
-        <td><%= link_to topic.title, topic %></td>
+        <td><%= link_to topic.name, topic %></td>
         <td><%= pluralize(topic.votes.count, "vote") %></td>
         <td><%= button_to '+1', upvote_topic_path(topic), method: :post %></td>
+<!-- the extra credit was: "Add a downvote button that does the opposite of what the upvote button does". Using the method of displaying votes we built, the fastest, easiest thing to do is to simply not show a downvote if the number of votes is less than 1. However to fix it properly, we should really save the votes to an attribute of the topic, so that the integer can go negative. -->
+        <% if topic.votes.count>0 %>
+          <td><%= button_to '-1', downvote_topic_path(topic), method: :delete %></td>
+        <% else %>
+        <% end %>
         <td><%= link_to 'Delete', topic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
