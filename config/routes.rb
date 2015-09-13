@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :topics do
     member do
       post 'upvote'
-      delete 'downvote'
+      post 'downvote'
     end
   end
   # The priority is based upon order of creation: first created -> highest priority.

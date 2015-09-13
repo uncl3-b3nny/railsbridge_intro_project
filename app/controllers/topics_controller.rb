@@ -3,13 +3,13 @@ class TopicsController < ApplicationController
 
   def upvote
     @topic = Topic.find(params[:id])
-    @topic.votes.create
+    @topic.votes.create(vote_value:1)
     redirect_to(topics_path)
   end
 
   def downvote
     @topic = Topic.find(params[:id])
-    @topic.votes.first.destroy
+    @topic.votes.create(vote_value:-1)
     redirect_to(topics_path)
   end
 
