@@ -9,7 +9,7 @@
       <th colspan="3"></th>
     </tr>
   </thead>
-
+<!-- look at all that logic in the view! -->
   <tbody>
     <!-- extra credit: "sort topics by their number of votes". Should really move a lot of this logic out of the view, but here's the duct tape: -->
     <% @topics.sort_by {|topic| topic.votes.count}.each do |topic| %>
@@ -18,13 +18,18 @@
         <!-- the extra credit was: "Add a downvote button that does the opposite of what the upvote button does". here's some more duct tape -->
         <% a = 0 %>
         <% topic.votes.each do |vote| a += vote.vote_value %>
-        <% end %>
+        <% end #topic.votes.each %> 
         <td><%= pluralize(a, "vote") %></td>
-        <td><%= button_to '+1', upvote_topic_path(topic), method: :post %></td>
-        <td><%= button_to '-1', downvote_topic_path(topic), method: :post %></td>
+          <!-- duct tape: check whether a user has voted on a topic. If they have, remove their ability to vote again. -->
+          <% b = topic.votes.where("user_id LIKE ? AND topic_id LIKE ?", current_user.id, topic.id).count %>
+          <%if b<1 %>
+              <td><%= button_to '+1', upvote_topic_path(topic), method: :post %></td>
+              <td><%= button_to '-1', downvote_topic_path(topic), method: :post %></td>
+          <% else %>  
+          <% end #if topic.votes.where %>
         <td><%= link_to 'Delete', topic, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
-    <% end %>
+    <% end #topics.sort_by%>
   </tbody>
 </table>
 
