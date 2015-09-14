@@ -3,9 +3,8 @@ class CreateTopics < ActiveRecord::Migration
     create_table :topics do |t|
       t.string :name
       t.text :description
-      t.integer :votes
 
-      t.timestamps null: false
+      t.timestamps 
     end
   end
 end
